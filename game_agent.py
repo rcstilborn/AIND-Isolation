@@ -7,7 +7,10 @@ You must test your agent's strength against a set of agents with known
 relative strength using tournament.py and include the results in your report.
 """
 import random
+import logging
+from cmath import inf
 
+logging.basicConfig(level=logging.ERROR)
 
 class Timeout(Exception):
     """Subclass base exception for code clarity."""
@@ -38,7 +41,20 @@ def custom_score(game, player):
     """
 
     # TODO: finish this function!
-    raise NotImplementedError
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+
+    #cells_left = len(game.get_blank_spaces())
+    own_moves = len(game.get_legal_moves(player))
+    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    if game.move_count < ((game.height * game.width)/2):
+        return float(own_moves - 3 * opp_moves)
+    else:
+        return float(own_moves - opp_moves)
+    
 
 
 class CustomPlayer:
@@ -79,7 +95,8 @@ class CustomPlayer:
         self.method = method
         self.time_left = None
         self.TIMER_THRESHOLD = timeout
-
+        self.best_move_so_far = (-1, -1)
+        
     def get_move(self, game, legal_moves, time_left):
         """Search for the best move from the available legal moves and return a
         result before the time limit expires.
@@ -115,11 +132,22 @@ class CustomPlayer:
             Board coordinates corresponding to a legal move; may return
             (-1, -1) if there are no available legal moves.
         """
-
+        logging.debug("get_move - legal moves: %s", str(legal_moves))
+        
         self.time_left = time_left
+
 
         # TODO: finish this function!
 
+        # Check if we have any legal moves
+        if not legal_moves:
+            return (-1, -1)
+
+        # Let's set best move so far to be the first legal move so we always 
+        # have something to return in case of timeout
+        self.best_move_so_far = legal_moves[0]
+        
+         
         # Perform any required initializations, including selecting an initial
         # move from the game board (i.e., an opening book), or returning
         # immediately if there are no legal moves
@@ -129,14 +157,29 @@ class CustomPlayer:
             # here in order to avoid timeout. The try/except block will
             # automatically catch the exception raised by the search method
             # when the timer gets close to expiring
-            pass
+            if self.iterative:
+                it = 1
+                while True:
+                    if self.method == 'minimax':
+                        _, self.best_move_so_far = self.minimax(game, it)
+                    else:
+                        _, self.best_move_so_far = self.alphabeta(game, it)
+                    it += 1
+            else:    
+                if self.method == 'minimax':
+                    _, self.best_move_so_far = self.minimax(game, self.search_depth)
+                else:
+                    _, self.best_move_so_far = self.alphabeta(game, self.search_depth)
 
         except Timeout:
             # Handle any actions required at timeout, if necessary
-            pass
+            logging.debug("Time is up - get_move returning: %s", str(self.best_move_so_far))
+            return self.best_move_so_far
 
         # Return the best move from the last completed search iteration
-        raise NotImplementedError
+        logging.debug("get_move returning: %s", str(self.best_move_so_far))
+
+        return self.best_move_so_far
 
     def minimax(self, game, depth, maximizing_player=True):
         """Implement the minimax search algorithm as described in the lectures.
@@ -169,11 +212,41 @@ class CustomPlayer:
                 to pass the project unit tests; you cannot call any other
                 evaluation function directly.
         """
-        if self.time_left() < self.TIMER_THRESHOLD:
-            raise Timeout()
 
-        # TODO: finish this function!
-        raise NotImplementedError
+        #logging.debug("minimax(%d, %s)", depth, maximizing_player)
+
+        # If we are out of time then jump out
+        if self.time_left() < self.TIMER_THRESHOLD:
+            raise Timeout()      
+        
+
+        if depth <= 0:  # Last row to search so return score of this board
+            return self.score(game, self),(-1,-1)
+        
+        # Otherwise search the next layer
+        legal_moves = game.get_legal_moves()
+        #logging.debug("    Found %d legal moves: %s", len(legal_moves), str(legal_moves))
+        
+        # Check for some legal moves - if none return score of this board
+        if len(legal_moves) == 0:
+            return self.score(game, self),(-1,-1)
+
+        results = []
+        for m in legal_moves:
+            #logging.debug("  Trying this move: %s", str(m))
+            score, _ = self.minimax(game.forecast_move(m), depth-1, not maximizing_player)
+            results.append((score,m))
+                                       
+        #results = [(score,_=self.minimax(game.forecast_move(m), depth-1, not maximizing_player)[0], m) for m in legal_moves]
+        #logging.debug("    Got these results: %s", str(results))
+        
+        if maximizing_player:
+            #logging.debug("    Returning: %s", max(results))
+            return max(results)
+        else:
+            #logging.debug("    Returning: %s", min(results))
+            return min(results)
+        
 
     def alphabeta(self, game, depth, alpha=float("-inf"), beta=float("inf"), maximizing_player=True):
         """Implement minimax search with alpha-beta pruning as described in the
@@ -213,8 +286,61 @@ class CustomPlayer:
                 to pass the project unit tests; you cannot call any other
                 evaluation function directly.
         """
+        #logging.debug("alphabeta(%d, %f, %f, %s)", depth, alpha, beta, maximizing_player)
+
         if self.time_left() < self.TIMER_THRESHOLD:
             raise Timeout()
 
-        # TODO: finish this function!
-        raise NotImplementedError
+        if depth <= 0:  # last row to search so return score of this board
+            score = self.score(game, self)
+            #logging.debug("  Returning %f", score)
+            return score,(-1,-1)
+      
+        # Otherwise search the next layer
+        legal_moves = game.get_legal_moves()
+        #logging.debug("Found %d legal moves: %s", len(legal_moves), str(legal_moves))
+
+        # Check for some legal moves - if none return score of this board
+        if len(legal_moves) == 0:
+            return self.score(game, self),(-1,-1)
+
+        # Perform max layer search       
+        if maximizing_player:
+            value = -inf
+            best_move_so_far = (-1,-1)
+            for m in legal_moves:
+                logging.debug("  Max layer - trying this move: %s", str(m))
+                #value = max(value,self.alphabeta(game.forecast_move(m), depth-1, alpha, beta, not maximizing_player)[0])
+                this_value, _ = self.alphabeta(game.forecast_move(m), depth-1, alpha, beta, not maximizing_player)
+                if this_value > value:
+                    value = this_value
+                    best_move_so_far = m
+                if value >= beta:
+                    #logging.debug("  Returning %f, %s", value, str(best_move_so_far))
+                    return value,m
+                alpha = max(alpha, value)
+            #logging.debug("  Returning %f, %s", value, str(best_move_so_far))
+            return value, best_move_so_far
+            
+        # Perform min layer search       
+        else:
+            value = inf
+            best_move_so_far = (-1,-1)
+            for m in legal_moves:
+                #logging.debug("  Min layer - trying this move: %s", str(m))
+                this_value, _ = self.alphabeta(game.forecast_move(m), depth-1, alpha, beta, not maximizing_player)
+                if this_value < value:
+                    value = this_value
+                    best_move_so_far = m
+                if value <= alpha:
+                    #logging.debug("  Returning %f, %s", value, str(best_move_so_far))
+                    return value,m
+                beta = min(beta, value)
+            #logging.debug("  Returning %f, %s", value, str(best_move_so_far))
+            return value, m
+
+
+
+        
+        
+        

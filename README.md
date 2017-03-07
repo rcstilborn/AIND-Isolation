@@ -1,6 +1,18 @@
 
 # Build a Game-playing Agent
 
+This is the second assignment in the first term of Udacity's Artificial Intelligence Nanodegree.  Our tasks were: 
+
+0. Implement minimax and alphabeta searches with and without iterative deepening in `game_agent.py`
+
+0. Investigate and implement at least three different evaluation heuristics
+
+0. Write a brief report about our heuristics: `heuristic_analysis.pdf`
+
+0. Write a one page summary of one of three papers about game playing: `research_review.pdf`
+
+
+ 
 ## Synopsis
 
 In this project, students will develop an adversarial search agent to play the game "Isolation".  Students only need to modify code in the `game_agent.py`, however, code is included for example player and evaluation functions for you to review and test against in the other files.
