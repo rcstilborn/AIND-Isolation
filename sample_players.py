@@ -207,8 +207,12 @@ class HumanPlayer():
         """
         if not legal_moves:
             return (-1, -1)
-
-        print(('\t'.join(['[%d] %s' % (i, str(move)) for i, move in enumerate(legal_moves)])))
+    
+        valid_moves = [(i, move) for i, move in enumerate(legal_moves)]
+        move_map = {move:i for i,move in valid_moves}
+        #print(str(move_map))
+        print(game.to_string_with_options(move_map))
+        #print(('\t'.join(['[%d] %s' % (i, str(move)) for i, move in enumerate(legal_moves)])))
 
         valid_choice = False
         while not valid_choice:

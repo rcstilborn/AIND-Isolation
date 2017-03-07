@@ -12,9 +12,10 @@ import timeit
 
 from copy import deepcopy
 from copy import copy
-
+from sample_players import HumanPlayer
 
 TIME_LIMIT_MILLIS = 200
+HUMAN_TIME_LIMIT_MILLIS = 300000 # five minutes
 
 
 class Board(object):
@@ -278,9 +279,10 @@ class Board(object):
         p1_loc = self.__last_player_move__[self.__player_1__]
         p2_loc = self.__last_player_move__[self.__player_2__]
 
-        out = ''
+        out = '    0   1   2   3   4   5   6\n\r'
 
         for i in range(self.height):
+            out += str(i)
             out += ' | '
 
             for j in range(self.width):
@@ -291,6 +293,37 @@ class Board(object):
                     out += '1'
                 elif p2_loc and i == p2_loc[0] and j == p2_loc[1]:
                     out += '2'
+                else:
+                    out += '-'
+
+                out += ' | '
+            out += '\n\r'
+
+        return out
+
+    def to_string_with_options(self, move_map):
+        """Generate a string representation of the current game state, marking
+        the location of each player and indicating which cells have been
+        blocked, and which remain open.
+        """
+
+        p1_loc = self.__last_player_move__[self.__player_1__]
+        p2_loc = self.__last_player_move__[self.__player_2__]
+        
+        #out = ''
+        out = '    0   1   2   3   4   5   6\n\r'
+        for i in range(self.height):
+            out += str(i)
+            out += ' | '
+            for j in range(self.width):
+                if (i,j) in move_map:
+                    out += str(move_map[(i,j)])
+                elif not self.__board_state__[i][j]:
+                    out += ' '
+                elif p1_loc and i == p1_loc[0] and j == p1_loc[1]:
+                    out += 'O'
+                elif p2_loc and i == p2_loc[0] and j == p2_loc[1]:
+                    out += 'X'
                 else:
                     out += '-'
 
@@ -328,7 +361,11 @@ class Board(object):
             game_copy = self.copy()
 
             move_start = curr_time_millis()
-            time_left = lambda : time_limit - (curr_time_millis() - move_start)
+            if type(self.active_player) is HumanPlayer:
+                time_left = lambda : HUMAN_TIME_LIMIT_MILLIS - (curr_time_millis() - move_start)
+            else: 
+                time_left = lambda : time_limit - (curr_time_millis() - move_start)                
+                
             curr_move = self.active_player.get_move(game_copy, legal_player_moves, time_left)
             move_end = time_left()
 
