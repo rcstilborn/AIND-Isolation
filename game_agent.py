@@ -9,6 +9,7 @@ relative strength using tournament.py and include the results in your report.
 import random
 import logging
 from cmath import inf
+from math import sqrt
 
 logging.basicConfig(level=logging.ERROR)
 
@@ -47,14 +48,46 @@ def custom_score(game, player):
     if game.is_winner(player):
         return float("inf")
 
-    #cells_left = len(game.get_blank_spaces())
+    return __heuristic1__(game, player)
+    
+def __heuristic1__(game, player):
+    """ Aggressive in the first half, 'normal' in the second half
+    """
     own_moves = len(game.get_legal_moves(player))
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
     if game.move_count < ((game.height * game.width)/2):
         return float(own_moves - 3 * opp_moves)
     else:
         return float(own_moves - opp_moves)
-    
+
+def __heuristic2__(game, player):
+    """ Moderately aggressive for the whole game
+    """
+    own_moves = len(game.get_legal_moves(player))
+    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    return float(own_moves - 2 * opp_moves)
+
+def __heuristic3__(game, player):
+    """ Tries to stay close to the center of the board for the first half of the game
+    """
+    own_moves = len(game.get_legal_moves(player))
+    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    if game.move_count < ((game.height * game.width)/2):
+        return float(own_moves - opp_moves - __distance_from_center__(game, player))
+    else:
+        return float(own_moves - opp_moves)
+
+def __distance_from_center__(game, player):
+    """ Calculates the Euclidean distance from the center
+    """
+    x,y = game.get_player_location(player)
+    return sqrt( (x - game.width/2)**2 + (y - game.height/2)**2 )
+
+
+def paramterized_heuristic(game, player):
+    """ Assumes the following parameter.
+    """
+    pass
 
 
 class CustomPlayer:

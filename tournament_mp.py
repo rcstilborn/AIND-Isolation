@@ -10,14 +10,11 @@ import itertools
 
 from tournament import play_match
 from isolation import Board
-from sample_players import RandomPlayer
-from sample_players import null_score
-from sample_players import open_move_score
-from sample_players import improved_score
-from game_agent import CustomPlayer
-from game_agent import custom_score
+from sample_players import RandomPlayer, null_score, open_move_score, improved_score
+from game_agent import CustomPlayer, custom_score
+from parameterized_evaluation_function import EvaluationFunction
 
-NUM_MATCHES = 50  # number of matches against each opponent
+NUM_MATCHES = 5  # number of matches against each opponent
 TIME_LIMIT = 150  # number of milliseconds before timeout
 
 TIMEOUT_WARNING = "One or more agents lost a match this round due to " + \
@@ -57,7 +54,7 @@ def play_round(agents, opponent, num_matches):
 
         #print("\tResult: {} to {}".format(int(counts[agent_1.player]),
         #                                  int(counts[agent_2.player])))
-    print("Returning score for ", opponent.name)
+    #print("Returning score for ", opponent.name)
 
     return (opponent.name, (100. * wins / total))
 
@@ -76,30 +73,45 @@ def main():
     # (MM=minimax, AB=alpha-beta) and the heuristic function (Null=null_score,
     # Open=open_move_score, Improved=improved_score). For example, MM_Open is
     # an agent using minimax search with the open moves heuristic.
-    mm_agents = [Agent(CustomPlayer(score_fn=h, **MM_ARGS),
+    mm_opponents = [Agent(CustomPlayer(score_fn=h, **MM_ARGS),
                        "MM_" + name) for name, h in HEURISTICS]
-    ab_agents = [Agent(CustomPlayer(score_fn=h, **AB_ARGS),
+    ab_opponents = [Agent(CustomPlayer(score_fn=h, **AB_ARGS),
                        "AB_" + name) for name, h in HEURISTICS]
-    random_agents = [Agent(RandomPlayer(), "Random")]
-    all_agents = random_agents + mm_agents + ab_agents
+    random_opponents = [Agent(RandomPlayer(), "Random")]
+    all_opponents = random_opponents + mm_opponents + ab_opponents
     
+    test_agents = []
     # ID_Improved agent is used for comparison to the performance of the
     # submitted agent for calibration on the performance across different
     # systems; i.e., the performance of the student agent is considered
     # relative to the performance of the ID_Improved agent to account for
     # faster or slower computers.
-    test_agents = [Agent(CustomPlayer(score_fn=improved_score, **CUSTOM_ARGS), "ID_Improved"),
-                   Agent(CustomPlayer(score_fn=custom_score, **CUSTOM_ARGS), "Student")]
+    test_agents.append(Agent(CustomPlayer(score_fn=improved_score, **CUSTOM_ARGS), "ID_Improved"))
+    
+    # Create all the parameterized evaluation function objects
+    # Then create all the test agents using those eval functions
+    #params = zip(range(3), range(3), range(-2,2), range(3), range(3), range(-2,2))
+    params = [(a,b,c,d,e,f) for a in range(1,3) 
+                            for b in range(1,3) 
+                            for c in range(-1,1) 
+                            for d in range(1,3) 
+                            for e in range(1,3) 
+                            for f in range(-1,1)]
+
+    for param in params:
+        eval_obj = EvaluationFunction(param)
+        test_agents.append(Agent(CustomPlayer(score_fn=eval_obj.eval_func, **CUSTOM_ARGS), "Student " + str(param)))
+    print(len(test_agents))
 
     #print(DESCRIPTION)
 
-    with Pool(processes=2) as pool:
+    with Pool(processes=4) as pool:
         results = []
         for agentUT in test_agents:
-            results.append(pool.apply_async(play_round, args=(all_agents, agentUT, NUM_MATCHES)))
+            results.append(pool.apply_async(play_round, args=(all_opponents, agentUT, NUM_MATCHES)))
 
         for result in results:
-            print(result.get(timeout=7200))
+            print(result.get())
 
 
 

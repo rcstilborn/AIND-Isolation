@@ -110,14 +110,14 @@ def play_round(agents, num_matches):
     wins = 0.
     total = 0.
 
-    print("\nPlaying Matches:")
-    print("----------")
+    #print("\nPlaying Matches:")
+    #print("----------")
 
     for idx, agent_2 in enumerate(agents[:-1]):
 
         counts = {agent_1.player: 0., agent_2.player: 0.}
         names = [agent_1.name, agent_2.name]
-        print("  Match {}: {!s:^11} vs {!s:^11}".format(idx + 1, *names), end=' ')
+        #print("  Match {}: {!s:^11} vs {!s:^11}".format(idx + 1, *names), end=' ')
 
         # Each player takes a turn going first
         for p1, p2 in itertools.permutations((agent_1.player, agent_2.player)):
@@ -129,8 +129,8 @@ def play_round(agents, num_matches):
 
         wins += counts[agent_1.player]
 
-        print("\tResult: {} to {}".format(int(counts[agent_1.player]),
-                                          int(counts[agent_2.player])))
+        #print("\tResult: {} to {}".format(int(counts[agent_1.player]),
+        #                                  int(counts[agent_2.player])))
 
     return 100. * wins / total
 
