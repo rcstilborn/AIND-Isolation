@@ -4,15 +4,16 @@ this is a multi-process version of tournament.py to take advantage of multi-core
 
 @author: richard
 '''
-from multiprocessing import Process, Pool, TimeoutError
+from multiprocessing import Pool
 from collections import namedtuple
-import itertools
+import sys, getopt, os, logging, itertools, datetime
 
 from tournament import play_match
 from isolation import Board
 from sample_players import RandomPlayer, null_score, open_move_score, improved_score
-from game_agent import CustomPlayer, custom_score
-from parameterized_evaluation_function import EvaluationFunction
+from game_agent import CustomPlayer, ParameterizedEvaluationFunction
+
+logging.basicConfig(level=logging.ERROR)
 
 NUM_MATCHES = 5  # number of matches against each opponent
 TIME_LIMIT = 150  # number of milliseconds before timeout
@@ -36,11 +37,11 @@ def play_round(agents, opponent, num_matches):
     print("Playing matches against: ", opponent.name)
     #print("----------")
 
+    #return opponent.name, 33.123456
     for idx, agent_2 in enumerate(agents[:-1]):
 
         counts = {opponent.player: 0., agent_2.player: 0.}
         names = [opponent.name, agent_2.name]
-        #print("  Match {}: {!s:^11} vs {!s:^11}".format(idx + 1, *names), end=' ')
 
         # Each player takes a turn going first
         for p1, p2 in itertools.permutations((opponent.player, agent_2.player)):
@@ -52,15 +53,39 @@ def play_round(agents, opponent, num_matches):
 
         wins += counts[opponent.player]
 
-        #print("\tResult: {} to {}".format(int(counts[agent_1.player]),
-        #                                  int(counts[agent_2.player])))
-    #print("Returning score for ", opponent.name)
-
-    return (opponent.name, (100. * wins / total))
+    return opponent.name, (100. * wins / total)
 
 
-def main():
+def main(argv):
 
+    USAGE = """usage: tournament_mp.py [-m <number of matches>] [-p <pool size>] [-o <outputfile>]
+            -m number of matches: optional number of matches (each match has 4 games) - default is 5
+            -p pool size: optional pool size - default is 3
+            -o output file: optional output file name - default is results.txt"""
+    
+    # Assumes 2 x dual-core CPUs able to run 3 processes relatively
+    # uninterrupted (interruptions cause get_move to timeout)
+    pool_size = 3 
+    outputfilename = 'results.txt'
+    num_matches = NUM_MATCHES
+    try:
+        opts, args = getopt.getopt(argv,"hm:p:o:",["matches=", "poolsize=","ofile="])
+    except getopt.GetoptError as err:
+        print(err)
+        print(USAGE)
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt in ["-h", "--help"]:
+            print(USAGE)
+            sys.exit()
+        elif opt in ("-m", "--matches"):
+            num_matches = int(arg)
+        elif opt in ("-p", "--poolsize"):
+            pool_size = int(arg)
+        elif opt in ("-o", "--ofile"):
+            outputfilename = arg
+
+    
     HEURISTICS = [("Null", null_score),
                   ("Open", open_move_score),
                   ("Improved", improved_score)]
@@ -90,30 +115,39 @@ def main():
     
     # Create all the parameterized evaluation function objects
     # Then create all the test agents using those eval functions
-    #params = zip(range(3), range(3), range(-2,2), range(3), range(3), range(-2,2))
     params = [(a,b,c,d,e,f) for a in range(1,3) 
                             for b in range(1,3) 
                             for c in range(-1,1) 
                             for d in range(1,3) 
                             for e in range(1,3) 
                             for f in range(-1,1)]
-
+    #params = [(0,0,0,0,0,0)]
     for param in params:
-        eval_obj = EvaluationFunction(param)
+        eval_obj = ParameterizedEvaluationFunction(param)
         test_agents.append(Agent(CustomPlayer(score_fn=eval_obj.eval_func, **CUSTOM_ARGS), "Student " + str(param)))
-    print(len(test_agents))
+    
+    # Put the start time in the output file
+    with open(outputfilename, mode='a') as ofile:
+        ofile.write('*******************************************************************************************\n')
+        ofile.write('Starting Isolation tournament with %d test agents, %d games per round, and %d sub-processes\n' % 
+               (len(test_agents), num_matches*4, pool_size))
+        ofile.write('Tournament started at %s\n' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
-    #print(DESCRIPTION)
-
-    with Pool(processes=4) as pool:
+    # Run the tournament!
+    with Pool(processes=pool_size) as pool:
         results = []
         for agentUT in test_agents:
-            results.append(pool.apply_async(play_round, args=(all_opponents, agentUT, NUM_MATCHES)))
+            results.append(pool.apply_async(play_round, args=(all_opponents, agentUT, num_matches)))
 
-        for result in results:
-            print(result.get())
-
+        # Write the output... flush each time as it takes a long time to run
+        with open(outputfilename, mode='a') as ofile:
+            for result in results:
+                agent, res = result.get()
+                ofile.write('%s got %2.2f\n' % (agent, res))
+                ofile.flush()
+            ofile.write('Tournament complete at: %s\n' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+            ofile.write('*******************************************************************************************\n\n')
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])
