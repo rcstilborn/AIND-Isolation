@@ -27,33 +27,32 @@ TIMEOUT_WARNING = "One or more agents lost a match this round due to " + \
 
 Agent = namedtuple("Agent", ["player", "name"])
 
-def play_round(agents, opponent, num_matches):
+def play_round(opponents, agent, num_matches):
     """
     Play one round (i.e., a single match between each pair of opponents)
     """
     wins = 0.
     total = 0.
 
-    print("Playing matches against: ", opponent.name)
+    print("Playing matches against: ", agent.name)
     #print("----------")
 
-    #return opponent.name, 33.123456
-    for idx, agent_2 in enumerate(agents[:-1]):
+    #return agent.name, 33.123456
+    for opponent in opponents:
 
-        counts = {opponent.player: 0., agent_2.player: 0.}
-        names = [opponent.name, agent_2.name]
+        counts = {agent.player: 0., opponent.player: 0.}
 
         # Each player takes a turn going first
-        for p1, p2 in itertools.permutations((opponent.player, agent_2.player)):
+        for p1, p2 in itertools.permutations((agent.player, opponent.player)):
             for _ in range(num_matches):
                 score_1, score_2 = play_match(p1, p2)
                 counts[p1] += score_1
                 counts[p2] += score_2
                 total += score_1 + score_2
 
-        wins += counts[opponent.player]
+        wins += counts[agent.player]
 
-    return opponent.name, (100. * wins / total)
+    return agent.name, (100. * wins / total)
 
 
 def main(argv):
@@ -116,12 +115,14 @@ def main(argv):
     # Create all the parameterized evaluation function objects
     # Then create all the test agents using those eval functions
     params = [(a,b,c,d,e,f) for a in range(1,3) 
-                            for b in range(1,3) 
-                            for c in range(-1,1) 
+                            for b in range(0,3) 
+                            for c in range(-1,2) 
                             for d in range(1,3) 
-                            for e in range(1,3) 
-                            for f in range(-1,1)]
+                            for e in range(0,3) 
+                            for f in range(0,1)]
     #params = [(0,0,0,0,0,0)]
+    #params = [(1, 2, -1, 1, 2, 0)]
+    
     for param in params:
         eval_obj = ParameterizedEvaluationFunction(param)
         test_agents.append(Agent(CustomPlayer(score_fn=eval_obj.eval_func, **CUSTOM_ARGS), "Student " + str(param)))
