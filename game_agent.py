@@ -6,7 +6,7 @@ augment the test suite with your own test cases to further test your code.
 You must test your agent's strength against a set of agents with known
 relative strength using tournament.py and include the results in your report.
 """
-import random
+
 import logging
 from cmath import inf
 from math import sqrt
@@ -41,14 +41,13 @@ def custom_score(game, player):
         The heuristic value of the current game state to the specified player.
     """
 
-    # TODO: finish this function!
     if game.is_loser(player):
         return float("-inf")
 
     if game.is_winner(player):
         return float("inf")
 
-    return __heuristic1__(game, player)
+    return __heuristic3__(game, player)
     
 def __heuristic1__(game, player):
     """ Aggressive in the first half, 'normal' in the second half
@@ -68,14 +67,14 @@ def __heuristic2__(game, player):
     return float(own_moves - 2 * opp_moves)
 
 def __heuristic3__(game, player):
-    """ Tries to stay close to the center of the board for the first half of the game
+    """ Tries to stay away from the center of the board for the first half of the game
     """
     own_moves = len(game.get_legal_moves(player))
     opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
     if game.move_count < ((game.height * game.width)/2):
-        return float(own_moves - opp_moves - __distance_from_center__(game, player))
+        return float(own_moves - 2 * opp_moves + __distance_from_center__(game, player))
     else:
-        return float(own_moves - opp_moves)
+        return float(own_moves - 2 * opp_moves)
 
 def __distance_from_center__(game, player):
     """ Calculates the Euclidean distance from the center
@@ -119,7 +118,6 @@ class ParameterizedEvaluationFunction:
         float
             The heuristic value of the current game state to the specified player.
         """
-        # TODO: finish this function!
         if game.is_loser(player):
             return float("-inf")
     
@@ -218,8 +216,6 @@ class CustomPlayer:
         self.time_left = time_left
 
 
-        # TODO: finish this function!
-
         # Check if we have any legal moves
         if not legal_moves:
             return (-1, -1)
@@ -300,13 +296,11 @@ class CustomPlayer:
         if self.time_left() < self.TIMER_THRESHOLD:
             raise Timeout()      
         
-
         if depth <= 0:  # Last row to search so return score of this board
             return self.score(game, self),(-1,-1)
         
         # Otherwise search the next layer
         legal_moves = game.get_legal_moves()
-        #logging.debug("    Found %d legal moves: %s", len(legal_moves), str(legal_moves))
         
         # Check for some legal moves - if none return score of this board
         if len(legal_moves) == 0:
@@ -314,18 +308,12 @@ class CustomPlayer:
 
         results = []
         for m in legal_moves:
-            #logging.debug("  Trying this move: %s", str(m))
             score, _ = self.minimax(game.forecast_move(m), depth-1, not maximizing_player)
             results.append((score,m))
                                        
-        #results = [(score,_=self.minimax(game.forecast_move(m), depth-1, not maximizing_player)[0], m) for m in legal_moves]
-        #logging.debug("    Got these results: %s", str(results))
-        
         if maximizing_player:
-            #logging.debug("    Returning: %s", max(results))
             return max(results)
         else:
-            #logging.debug("    Returning: %s", min(results))
             return min(results)
         
 
@@ -374,12 +362,10 @@ class CustomPlayer:
 
         if depth <= 0:  # last row to search so return score of this board
             score = self.score(game, self)
-            #logging.debug("  Returning %f", score)
             return score,(-1,-1)
       
         # Otherwise search the next layer
         legal_moves = game.get_legal_moves()
-        #logging.debug("Found %d legal moves: %s", len(legal_moves), str(legal_moves))
 
         # Check for some legal moves - if none return score of this board
         if len(legal_moves) == 0:
@@ -391,16 +377,13 @@ class CustomPlayer:
             best_move_so_far = (-1,-1)
             for m in legal_moves:
                 logging.debug("  Max layer - trying this move: %s", str(m))
-                #value = max(value,self.alphabeta(game.forecast_move(m), depth-1, alpha, beta, not maximizing_player)[0])
                 this_value, _ = self.alphabeta(game.forecast_move(m), depth-1, alpha, beta, not maximizing_player)
                 if this_value > value:
                     value = this_value
                     best_move_so_far = m
                 if value >= beta:
-                    #logging.debug("  Returning %f, %s", value, str(best_move_so_far))
                     return value,m
                 alpha = max(alpha, value)
-            #logging.debug("  Returning %f, %s", value, str(best_move_so_far))
             return value, best_move_so_far
             
         # Perform min layer search       
@@ -408,16 +391,14 @@ class CustomPlayer:
             value = inf
             best_move_so_far = (-1,-1)
             for m in legal_moves:
-                #logging.debug("  Min layer - trying this move: %s", str(m))
+                logging.debug("  Min layer - trying this move: %s", str(m))
                 this_value, _ = self.alphabeta(game.forecast_move(m), depth-1, alpha, beta, not maximizing_player)
                 if this_value < value:
                     value = this_value
                     best_move_so_far = m
                 if value <= alpha:
-                    #logging.debug("  Returning %f, %s", value, str(best_move_so_far))
                     return value,m
                 beta = min(beta, value)
-            #logging.debug("  Returning %f, %s", value, str(best_move_so_far))
             return value, m
 
 
