@@ -8,8 +8,7 @@ relative strength using tournament.py and include the results in your report.
 """
 
 import logging
-from cmath import inf
-from math import sqrt
+from math import inf, sqrt
 
 logging.basicConfig(level=logging.ERROR)
 

@@ -1,4 +1,4 @@
-.metadata/
-.project/
-.pydevproject/
-results.txt
+.project
+.pydevproject
+__pycache__/
+

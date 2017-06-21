@@ -1,0 +1,268 @@
+	Command being timed: "python tournament_mp.py -m 1 -p 2"
+	User time (seconds): 3523.32
+	System time (seconds): 5.36
+	Percent of CPU this job got: 197%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 29:43.51
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 15296
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 5199
+	Voluntary context switches: 17959
+	Involuntary context switches: 35557
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 272
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+*******************************************************************************************
+Starting Isolation tournament with 65 test agents, 4 games per round, and 2 sub-processes
+Tournament started at 2017-03-08 22:32:27
+ID_Improved got 62.50
+Student (1, 1, -1, 1, 1, -1) got 70.83
+Student (1, 1, -1, 1, 1, 0) got 79.17
+Student (1, 1, -1, 1, 2, -1) got 70.83
+Student (1, 1, -1, 1, 2, 0) got 66.67
+Student (1, 1, -1, 2, 1, -1) got 75.00
+Student (1, 1, -1, 2, 1, 0) got 83.33
+Student (1, 1, -1, 2, 2, -1) got 66.67
+Student (1, 1, -1, 2, 2, 0) got 79.17
+Student (1, 1, 0, 1, 1, -1) got 75.00
+Student (1, 1, 0, 1, 1, 0) got 54.17
+Student (1, 1, 0, 1, 2, -1) got 75.00
+Student (1, 1, 0, 1, 2, 0) got 79.17
+Student (1, 1, 0, 2, 1, -1) got 83.33
+Student (1, 1, 0, 2, 1, 0) got 75.00
+Student (1, 1, 0, 2, 2, -1) got 79.17
+Student (1, 1, 0, 2, 2, 0) got 70.83
+Student (1, 2, -1, 1, 1, -1) got 75.00
+Student (1, 2, -1, 1, 1, 0) got 54.17
+Student (1, 2, -1, 1, 2, -1) got 66.67
+Student (1, 2, -1, 1, 2, 0) got 66.67
+Student (1, 2, -1, 2, 1, -1) got 62.50
+Student (1, 2, -1, 2, 1, 0) got 83.33
+Student (1, 2, -1, 2, 2, -1) got 70.83
+Student (1, 2, -1, 2, 2, 0) got 66.67
+Student (1, 2, 0, 1, 1, -1) got 66.67
+Student (1, 2, 0, 1, 1, 0) got 79.17
+Student (1, 2, 0, 1, 2, -1) got 66.67
+Student (1, 2, 0, 1, 2, 0) got 91.67
+Student (1, 2, 0, 2, 1, -1) got 87.50
+Student (1, 2, 0, 2, 1, 0) got 79.17
+Student (1, 2, 0, 2, 2, -1) got 75.00
+Student (1, 2, 0, 2, 2, 0) got 70.83
+Student (2, 1, -1, 1, 1, -1) got 83.33
+Student (2, 1, -1, 1, 1, 0) got 54.17
+Student (2, 1, -1, 1, 2, -1) got 66.67
+Student (2, 1, -1, 1, 2, 0) got 79.17
+Student (2, 1, -1, 2, 1, -1) got 62.50
+Student (2, 1, -1, 2, 1, 0) got 66.67
+Student (2, 1, -1, 2, 2, -1) got 70.83
+Student (2, 1, -1, 2, 2, 0) got 83.33
+Student (2, 1, 0, 1, 1, -1) got 66.67
+Student (2, 1, 0, 1, 1, 0) got 62.50
+Student (2, 1, 0, 1, 2, -1) got 58.33
+Student (2, 1, 0, 1, 2, 0) got 70.83
+Student (2, 1, 0, 2, 1, -1) got 75.00
+Student (2, 1, 0, 2, 1, 0) got 70.83
+Student (2, 1, 0, 2, 2, -1) got 58.33
+Student (2, 1, 0, 2, 2, 0) got 79.17
+Student (2, 2, -1, 1, 1, -1) got 83.33
+Student (2, 2, -1, 1, 1, 0) got 75.00
+Student (2, 2, -1, 1, 2, -1) got 75.00
+Student (2, 2, -1, 1, 2, 0) got 62.50
+Student (2, 2, -1, 2, 1, -1) got 75.00
+Student (2, 2, -1, 2, 1, 0) got 79.17
+Student (2, 2, -1, 2, 2, -1) got 75.00
+Student (2, 2, -1, 2, 2, 0) got 70.83
+Student (2, 2, 0, 1, 1, -1) got 66.67
+Student (2, 2, 0, 1, 1, 0) got 70.83
+Student (2, 2, 0, 1, 2, -1) got 66.67
+Student (2, 2, 0, 1, 2, 0) got 87.50
+Student (2, 2, 0, 2, 1, -1) got 66.67
+Student (2, 2, 0, 2, 1, 0) got 66.67
+Student (2, 2, 0, 2, 2, -1) got 70.83
+Student (2, 2, 0, 2, 2, 0) got 75.00
+Tournament complete at: 2017-03-08 23:02:10
+*******************************************************************************************
+
+
+
+*******************************************************************************************
+Starting Isolation tournament with 65 test agents, 200 games per round, and 14 sub-processes
+Tournament started at 2017-03-08 23:34:31
+ID_Improved got 72.75
+Student (1, 1, -1, 1, 1, -1) got 73.33
+Student (1, 1, -1, 1, 1, 0) got 74.42
+Student (1, 1, -1, 1, 2, -1) got 73.17
+Student (1, 1, -1, 1, 2, 0) got 72.17
+Student (1, 1, -1, 2, 1, -1) got 72.42
+Student (1, 1, -1, 2, 1, 0) got 73.92
+Student (1, 1, -1, 2, 2, -1) got 74.00
+Student (1, 1, -1, 2, 2, 0) got 73.67
+Student (1, 1, 0, 1, 1, -1) got 73.17
+Student (1, 1, 0, 1, 1, 0) got 72.58
+Student (1, 1, 0, 1, 2, -1) got 72.83
+Student (1, 1, 0, 1, 2, 0) got 72.50
+Student (1, 1, 0, 2, 1, -1) got 75.67
+Student (1, 1, 0, 2, 1, 0) got 70.67
+Student (1, 1, 0, 2, 2, -1) got 74.67
+Student (1, 1, 0, 2, 2, 0) got 71.50
+Student (1, 2, -1, 1, 1, -1) got 73.75
+Student (1, 2, -1, 1, 1, 0) got 71.17
+Student (1, 2, -1, 1, 2, -1) got 72.50
+Student (1, 2, -1, 1, 2, 0) got 75.75
+Student (1, 2, -1, 2, 1, -1) got 73.42
+Student (1, 2, -1, 2, 1, 0) got 74.67
+Student (1, 2, -1, 2, 2, -1) got 73.58
+Student (1, 2, -1, 2, 2, 0) got 72.33
+Student (1, 2, 0, 1, 1, -1) got 71.50
+Student (1, 2, 0, 1, 1, 0) got 72.08
+Student (1, 2, 0, 1, 2, -1) got 69.67
+Student (1, 2, 0, 1, 2, 0) got 72.67
+Student (1, 2, 0, 2, 1, -1) got 72.75
+Student (1, 2, 0, 2, 1, 0) got 71.75
+Student (1, 2, 0, 2, 2, -1) got 72.00
+Student (1, 2, 0, 2, 2, 0) got 71.75
+Student (2, 1, -1, 1, 1, -1) got 71.25
+Student (2, 1, -1, 1, 1, 0) got 72.75
+Student (2, 1, -1, 1, 2, -1) got 75.08
+Student (2, 1, -1, 1, 2, 0) got 73.33
+Student (2, 1, -1, 2, 1, -1) got 73.33
+Student (2, 1, -1, 2, 1, 0) got 72.42
+Student (2, 1, -1, 2, 2, -1) got 74.25
+Student (2, 1, -1, 2, 2, 0) got 72.67
+Student (2, 1, 0, 1, 1, -1) got 70.42
+Student (2, 1, 0, 1, 1, 0) got 70.67
+Student (2, 1, 0, 1, 2, -1) got 73.42
+Student (2, 1, 0, 1, 2, 0) got 72.25
+Student (2, 1, 0, 2, 1, -1) got 72.33
+Student (2, 1, 0, 2, 1, 0) got 72.92
+Student (2, 1, 0, 2, 2, -1) got 71.25
+Student (2, 1, 0, 2, 2, 0) got 71.75
+Student (2, 2, -1, 1, 1, -1) got 70.25
+Student (2, 2, -1, 1, 1, 0) got 71.58
+Student (2, 2, -1, 1, 2, -1) got 72.08
+Student (2, 2, -1, 1, 2, 0) got 71.00
+Student (2, 2, -1, 2, 1, -1) got 72.08
+Student (2, 2, -1, 2, 1, 0) got 71.75
+Student (2, 2, -1, 2, 2, -1) got 72.83
+Student (2, 2, -1, 2, 2, 0) got 71.67
+Student (2, 2, 0, 1, 1, -1) got 71.33
+Student (2, 2, 0, 1, 1, 0) got 71.50
+Student (2, 2, 0, 1, 2, -1) got 73.08
+Student (2, 2, 0, 1, 2, 0) got 70.25
+Student (2, 2, 0, 2, 1, -1) got 71.75
+Student (2, 2, 0, 2, 1, 0) got 73.33
+Student (2, 2, 0, 2, 2, -1) got 72.33
+Student (2, 2, 0, 2, 2, 0) got 72.17
+Tournament complete at: 2017-03-09 03:19:24
+*******************************************************************************************
+	Command being timed: "python tournament_mp.py -m 50 -p 14"
+	User time (seconds): 174921.32
+	System time (seconds): 331.50
+	Percent of CPU this job got: 1298%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:44:53
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 15176
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 14318
+	Voluntary context switches: 134833
+	Involuntary context switches: 187600
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 128
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+
+
+*******************************************************************************************
+Starting Isolation tournament with 2 test agents, 1000 games per round, and 1 sub-processes
+Tournament started at 2017-03-08 21:39:37
+ID_Improved got 71.93
+Student (1, 2, -1, 1, 2, 0) got 73.27
+Tournament complete at: 2017-03-09 05:07:26
+*******************************************************************************************
+	Command being timed: "python tournament_mp.py -p 1 -m 250"
+	User time (seconds): 26854.77
+	System time (seconds): 11.88
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 7:27:50
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 14820
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 38
+	Minor (reclaiming a frame) page faults: 4525
+	Voluntary context switches: 268331
+	Involuntary context switches: 1092748
+	Swaps: 0
+	File system inputs: 5184
+	File system outputs: 24
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+
+
+
+
+
+
+
+
+
+	Command being timed: "python tournament_mp.py -m 125 -p 14"
+	User time (seconds): 878164.58
+	System time (seconds): 1734.32
+	Percent of CPU this job got: 1361%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 17:56:56
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 15152
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 53
+	Minor (reclaiming a frame) page faults: 14402
+	Voluntary context switches: 645225
+	Involuntary context switches: 825641
+	Swaps: 0
+	File system inputs: 22088
+	File system outputs: 320
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+
+
+
+
+
+
+
+
+
+
+
+
